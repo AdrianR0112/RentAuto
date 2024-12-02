@@ -1,0 +1,163 @@
+
+/* Estilos Personalizados para la busqueda de autos tomando en cuneta filtros */
+.filter-sidebar {
+    background-color: #f8f9fa;
+    padding: 20px;
+    border-radius: 5px;
+}
+
+.filter-section {
+    margin-bottom: 20px;
+}
+
+.filter-title {
+    font-weight: 500;
+    margin-bottom: 10px;
+    color: #000;
+    font-size: 0.9rem;
+}
+
+/* Mejoras en los selectores */
+.filter-sidebar select.form-control {
+    height: auto;
+    padding: 8px 12px;
+    white-space: normal;
+    word-wrap: break-word;
+}
+
+/* Mejoras en las opciones */
+.filter-sidebar select.form-control option {
+    padding: 8px;
+    white-space: normal;
+    word-wrap: break-word;
+    line-height: 1.4;
+}
+
+/* Mejoras en los inputs */
+.filter-sidebar input.form-control {
+    height: 40px;
+    padding: 8px 12px;
+}
+
+/* Mejoras en el espaciado de los contenedores */
+.filter-sidebar .form-control {
+    margin-bottom: 10px;
+    font-size: 0.9rem;
+}
+
+/* Estilo para los botones */
+.filter-sidebar .btn {
+    padding: 10px 15px;
+    font-size: 0.9rem;
+    margin-top: 15px;
+}
+
+/* Mejora en el contenedor de rango de precios */
+.price-range-container {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.price-range-container .form-control {
+    margin-bottom: 0;
+}
+
+.rent-item {
+    height: 450px;
+    /* Altura fija para todas las cards */
+    display: flex;
+    flex-direction: column;
+    background: white;
+    border: 1px solid #e0e0e0;
+    border-radius: 5px;
+    overflow: hidden;
+    margin-bottom: 20px;
+    padding: 15px;
+}
+
+.rent-item .img-container {
+    height: 200px;
+    /* Altura fija para los contenedores de imagen */
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 15px;
+}
+
+.rent-item .img-container img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    /* Mantiene la proporción de la imagen */
+}
+
+.rent-item h4 {
+    text-align: center;
+    margin: 10px 0;
+    height: 50px;
+    /* Altura fija para el título */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.rent-item .price-container {
+    text-align: center;
+    margin: 10px 0;
+    font-weight: bold;
+}
+
+.rent-item .features-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 15px 0;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.rent-item .feature-item {
+    display: flex;
+    align-items: center;
+    padding: 0 10px;
+}
+
+.rent-item .feature-item i {
+    margin-right: 5px;
+}
+
+.rent-item .btn-container {
+    margin-top: auto;
+    /* Empuja el botón hacia abajo */
+    text-align: center;
+}
+
+.rent-item .border-left {
+    border-left: 1px solid #dee2e6 !important;
+}
+
+.rent-item .border-right {
+    border-right: 1px solid #dee2e6 !important;
+}
+
+/* Ajustes responsive */
+@media (max-width: 768px) {
+    .rent-item {
+        height: auto;
+        min-height: 450px;
+    }
+}
+
+/* Ajuste para dispositivos móviles */
+@media (max-width: 768px) {
+    .filter-sidebar {
+        margin-bottom: 20px;
+    }
+
+    .filter-section {
+        margin-bottom: 15px;
+    }
+}
