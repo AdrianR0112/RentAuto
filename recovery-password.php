@@ -1,9 +1,14 @@
+<?php
+session_start();
+error_reporting(0);
+?>
+
 <!DOCTYPE html>
 <html lang="es">
 
 <head>
     <meta charset="utf-8">
-    <title>ECUA CARS - Alquiler de Autos</title>
+    <title>ECUA CARS - Recuperación de Contraseña</title>
 
     <!-- Favicon -->
     <link href="img/favicon.ico" rel="icon">
@@ -25,13 +30,28 @@
 
     <!-- Estilo de Plantilla -->
     <link href="css/style.css" rel="stylesheet">
+
+    <style>
+        .alert-custom {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 1000;
+            width: 80%;
+            max-width: 500px;
+        }
+    </style>
 </head>
 
 <body>
+    <?php
+    session_start();
+    ?>
+
     <!--Header-->
     <?php include('includes/header.php'); ?>
     <!-- /Header -->
-
 
     <!-- Page Header Start -->
     <div class="container-fluid page-header">
@@ -39,6 +59,23 @@
     </div>
     <!-- Page Header Start -->
 
+    <!-- Message Alert -->
+    <?php if (isset($_SESSION['message'])): ?>
+        <div class="alert <?php
+        echo ($_SESSION['message'] == 'success') ? 'alert-success' :
+            (($_SESSION['message'] == 'error') ? 'alert-danger' : 'alert-warning');
+        ?> alert-dismissible fade show alert-custom" role="alert">
+            <?php echo htmlspecialchars($_SESSION['message_text']); ?>
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <?php
+        // Clear the message after displaying
+        unset($_SESSION['message']);
+        unset($_SESSION['message_text']);
+    endif;
+    ?>
 
     <!-- Recovery Password Start -->
     <div class="container-fluid py-5">
@@ -46,7 +83,8 @@
             <div class="row">
                 <div class="col-lg-6 mx-auto">
                     <div class="bg-secondary p-4 rounded">
-                        <form action="config/recovery.php" method="POST" name="recoverypassword" onSubmit="return validateEmail();">
+                        <form action="config/recovery.php" method="POST" name="recoverypassword"
+                            onSubmit="return validateEmail();">
                             <div class="mb-4">
                                 <label class="text-light mb-2">Correo Electrónico</label>
                                 <div class="input-group">
@@ -72,15 +110,12 @@
     </div>
     <!-- Recovery Password End -->
 
-
-
     <!--Footer-->
     <?php include('includes/footer.php'); ?>
     <!-- /Footer -->
 
     <!-- Back to Top -->
     <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="fa fa-angle-double-up"></i></a>
-
 
     <!-- JavaScript Libraries -->
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>

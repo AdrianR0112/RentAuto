@@ -9,7 +9,7 @@ $params = [];
 // Procesar filtros
 if ($_GET) {
     if (!empty($_GET['marca'])) {
-        $where_conditions[] = "v.MarcaVehiculo = ?";
+        $where_conditions[] = "m.IdMarca = ?";
         $params[] = $_GET['marca'];
     }
     if (!empty($_GET['categoria'])) {
@@ -33,7 +33,7 @@ if ($_GET) {
         $params[] = $_GET['combustible'];
     }
     if (!empty($_GET['ano_min'])) {
-        $where_conditions[] = "v.AnoModelo >= ?";
+        $where_conditions[] = "m.AnoModelo >= ?";
         $params[] = $_GET['ano_min'];
     }
     if (!empty($_GET['capacidad'])) {
@@ -43,9 +43,14 @@ if ($_GET) {
 }
 
 // Construir consulta SQL
-$sql = "SELECT v.id, v.TituloVehiculo, v.CapacidadAsientos, v.TipoCombustible, v.Transmision, v.PrecioPorDia, v.Imagen1, 
-               v.Categoria, v.AnoModelo, v.MarcaVehiculo 
-        FROM tblvehicles v";
+$sql = "SELECT v.id, 
+        CONCAT(b.NombreMarca, ' ', m.NombreModelo) AS TituloVehiculo, 
+        v.CapacidadAsientos, v.TipoCombustible, 
+        v.Transmision, v.PrecioPorDia, v.Imagen1, v.Categoria, 
+        m.AnoModelo, b.NombreMarca 
+        FROM tblvehicles v
+        JOIN tblmodels m ON v.IdModelo = m.id
+        JOIN tblbrands b ON m.IdMarca = b.id";
 
 if (!empty($where_conditions)) {
     $sql .= " WHERE " . implode(" AND ", $where_conditions);
@@ -54,10 +59,10 @@ if (!empty($where_conditions)) {
 $stmt = $dbh->prepare($sql);
 $stmt->execute($params);
 
-// Consulta modificada para obtener las marcas desde tblbrands
+// Consulta para obtener marcas
 $marcas_stmt = $dbh->query("SELECT DISTINCT b.id, b.NombreMarca 
                            FROM tblbrands b 
-                           INNER JOIN tblvehicles v ON b.id = v.MarcaVehiculo 
+                           INNER JOIN tblmodels m ON b.id = m.IdMarca 
                            ORDER BY b.NombreMarca");
 
 $categorias_stmt = $dbh->query("SELECT DISTINCT Categoria FROM tblvehicles ORDER BY Categoria");
@@ -65,10 +70,8 @@ $transmisiones_stmt = $dbh->query("SELECT DISTINCT Transmision FROM tblvehicles"
 $combustibles_stmt = $dbh->query("SELECT DISTINCT TipoCombustible FROM tblvehicles");
 ?>
 
-
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
     <meta charset="utf-8">
     <title>ECUA CARS - Alquiler de Autos</title>
@@ -78,8 +81,7 @@ $combustibles_stmt = $dbh->query("SELECT DISTINCT TipoCombustible FROM tblvehicl
 
     <!-- Google Web Fonts -->
     <link rel="preconnect" href="https://fonts.gstatic.com">
-    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Rubik&display=swap"
-        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Rubik&display=swap" rel="stylesheet">
 
     <!-- Font Awesome -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.0/css/all.min.css" rel="stylesheet">
@@ -88,15 +90,12 @@ $combustibles_stmt = $dbh->query("SELECT DISTINCT TipoCombustible FROM tblvehicl
     <link href="lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
     <link href="lib/tempusdominus/css/tempusdominus-bootstrap-4.min.css" rel="stylesheet" />
 
-
     <!-- Estilos Personalizados de Bootstrap -->
     <link href="css/bootstrap.min.css" rel="stylesheet">
 
     <!-- Estilo de Plantilla -->
     <link href="css/style.css" rel="stylesheet">
     <link href="css/style2.css" rel="stylesheet">
-
-    
 </head>
 
 <body>
@@ -213,7 +212,6 @@ $combustibles_stmt = $dbh->query("SELECT DISTINCT TipoCombustible FROM tblvehicl
     <!-- Back to Top -->
     <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="fa fa-angle-double-up"></i></a>
 
-
     <!-- JavaScript Libraries -->
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
@@ -224,8 +222,6 @@ $combustibles_stmt = $dbh->query("SELECT DISTINCT TipoCombustible FROM tblvehicl
     <script src="lib/tempusdominus/js/moment-timezone.min.js"></script>
     <script src="lib/tempusdominus/js/tempusdominus-bootstrap-4.min.js"></script>
 
-
     <script src="js/main.js"></script>
 </body>
-
 </html>

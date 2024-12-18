@@ -3,9 +3,23 @@
 session_start();
 require_once 'includes/config.php';
 error_reporting(0);
-// Consulta SQL para obtener vehículos
 
-$sql = "SELECT id, TituloVehiculo, CapacidadAsientos, TipoCombustible,Transmision, PrecioPorDia, Imagen1 FROM tblvehicles";
+// Consulta SQL para obtener vehículos
+$sql = "SELECT 
+            v.id, 
+            v.DescripcionVehiculo,
+            v.CapacidadAsientos, 
+            v.TipoCombustible,
+            v.Transmision, 
+            v.PrecioPorDia, 
+            v.Imagen1,
+            v.Categoria,
+            b.NombreMarca,
+            m.NombreModelo,
+            m.AnoModelo
+        FROM tblvehicles v
+        LEFT JOIN tblbrands b ON v.MarcaVehiculo = b.id
+        LEFT JOIN tblmodels m ON v.IdModelo = m.id";
 $stmt = $dbh->prepare($sql);
 $stmt->execute();
 ?>
@@ -87,7 +101,6 @@ $stmt->execute();
     <!-- Rent A Car Start -->
     <div class="container-fluid">
         <div class="container pt-5 pb-3">
-            <!-- <h1 class="display-4 text-uppercase text-center mb-5">Encuentra un auto</h1> -->
             <div class="row">
                 <?php
                 // Mostrar los resultados de la consulta
@@ -98,7 +111,11 @@ $stmt->execute();
                             <div class="rent-item mb-4">
                                 <img class="img-fluid mb-4" src="img/cars/<?php echo htmlspecialchars($row['Imagen1']); ?>"
                                     alt="">
-                                <h4 class="text-uppercase mb-2"><?php echo htmlspecialchars($row['TituloVehiculo']); ?></h4>
+                                <h4 class="text-uppercase mb-2">
+                                    <?php
+                                    echo htmlspecialchars($row['NombreMarca'] . ' ' . $row['NombreModelo'] . ' ' . $row['AnoModelo']);
+                                    ?>
+                                </h4>
                                 <div class="px-2 mb-2">
                                     <span>$<?php echo htmlspecialchars($row['PrecioPorDia']); ?>/Día</span>
                                 </div>
@@ -222,6 +239,16 @@ $stmt->execute();
     <script src="lib/tempusdominus/js/tempusdominus-bootstrap-4.min.js"></script>
 
     <script src="js/main.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            <?php
+            if (isset($_GET['openLogin']) && $_GET['openLogin'] === 'true') {
+                ?>
+                $('#loginModal').modal('show');
+            <?php } ?>
+        });
+    </script>
 </body>
 
 </html>

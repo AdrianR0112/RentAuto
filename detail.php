@@ -11,8 +11,15 @@ if (!isset($_GET['id']) || empty($_GET['id'])) {
 
 $vehicleId = intval($_GET['id']);
 
-// Consulta SQL para obtener los detalles del vehículo
-$sql = "SELECT * FROM tblvehicles WHERE id = :id";
+// Consulta SQL mejorada para obtener los detalles del vehículo con información de marca y modelo
+$sql = "SELECT v.*, 
+               m.NombreModelo, 
+               m.AnoModelo AS ModeloAno, 
+               b.NombreMarca 
+        FROM tblvehicles v
+        LEFT JOIN tblmodels m ON v.IdModelo = m.id
+        LEFT JOIN tblbrands b ON v.MarcaVehiculo = b.id
+        WHERE v.id = :id";
 $stmt = $dbh->prepare($sql);
 $stmt->bindParam(':id', $vehicleId, PDO::PARAM_INT);
 $stmt->execute();
@@ -25,10 +32,19 @@ if ($stmt->rowCount() == 0) {
 $vehicle = $stmt->fetch(PDO::FETCH_ASSOC);
 
 // Consulta para obtener vehículos relacionados (misma categoría)
-$relatedSql = "SELECT id, TituloVehiculo, AnoModelo, Transmision, PrecioPorDia, Imagen1 
-               FROM tblvehicles 
-               WHERE Categoria = :categoria 
-               AND id != :id 
+$relatedSql = "SELECT v.id, 
+                      v.Imagen1, 
+                      v.TipoCombustible,
+                      m.NombreModelo, 
+                      b.NombreMarca, 
+                      v.PrecioPorDia, 
+                      v.Transmision, 
+                      m.AnoModelo
+               FROM tblvehicles v
+               LEFT JOIN tblmodels m ON v.IdModelo = m.id
+               LEFT JOIN tblbrands b ON v.MarcaVehiculo = b.id
+               WHERE v.Categoria = :categoria 
+               AND v.id != :id 
                LIMIT 4";
 $relatedStmt = $dbh->prepare($relatedSql);
 $relatedStmt->bindParam(':categoria', $vehicle['Categoria'], PDO::PARAM_STR);
@@ -82,43 +98,86 @@ $relatedVehicles = $relatedStmt->fetchAll(PDO::FETCH_ASSOC);
         <div class="container pt-5">
             <div class="row">
                 <div class="col-lg-8 mb-5">
-                    <h1 class="display-4 text-uppercase mb-5">
-                        <?php echo htmlspecialchars($vehicle['TituloVehiculo']); ?>
-                    </h1>
+                    <div class="mb-4">
+                        <h1 class="display-4 text-uppercase mb-2">
+                            <?php echo htmlspecialchars($vehicle['NombreMarca'] . ' ' . $vehicle['NombreModelo']); ?>
+                        </h1>
+                        <p class="text-muted h4">
+                            $<?php echo htmlspecialchars($vehicle['PrecioPorDia']); ?>/Día
+                        </p>
+                    </div>
+
                     <div class="col-lg-6 mb-4">
                         <img class="img-fluid w-100" src="img/cars/<?php echo htmlspecialchars($vehicle['Imagen1']); ?>"
-                            alt="<?php echo htmlspecialchars($vehicle['TituloVehiculo']); ?>">
+                            alt="<?php echo htmlspecialchars($vehicle['NombreMarca'] . ' ' . $vehicle['NombreModelo']); ?>">
                     </div>
+
                     <p><?php echo htmlspecialchars($vehicle['DescripcionVehiculo']); ?></p>
+
                     <div class="row pt-2">
-                        <div class="col-md-3 col-6 mb-2">
-                            <i class="fa fa-car text-primary mr-2"></i>
-                            <span>Modelo: <?php echo htmlspecialchars($vehicle['AnoModelo']); ?></span>
+                        <div class="col-md-4 col-6 mb-3">
+                            <div class="d-flex align-items-center">
+                                <i class="fa fa-car text-primary mr-2"></i>
+                                <span>
+                                    <strong>Modelo:</strong>
+                                    <?php echo htmlspecialchars($vehicle['NombreModelo'] . ' ' . $vehicle['ModeloAno']); ?>
+                                </span>
+                            </div>
                         </div>
-                        <div class="col-md-3 col-6 mb-2">
-                            <i class="fa fa-cogs text-primary mr-2"></i>
-                            <span><?php echo htmlspecialchars($vehicle['Transmision']); ?></span>
+
+                        <div class="col-md-4 col-6 mb-3">
+                            <div class="d-flex align-items-center">
+                                <i class="fa fa-cogs text-primary mr-2"></i>
+                                <span>
+                                    <strong>Transmisión:</strong>
+                                    <?php echo htmlspecialchars($vehicle['Transmision']); ?>
+                                </span>
+                            </div>
                         </div>
-                        <div class="col-md-3 col-6 mb-2">
-                            <i class="fa fa-gas-pump text-primary mr-2"></i>
-                            <span><?php echo htmlspecialchars($vehicle['TipoCombustible']); ?></span>
+
+                        <div class="col-md-4 col-6 mb-3">
+                            <div class="d-flex align-items-center">
+                                <i class="fa fa-gas-pump text-primary mr-2"></i>
+                                <span>
+                                    <strong>Combustible:</strong>
+                                    <?php echo htmlspecialchars($vehicle['TipoCombustible']); ?>
+                                </span>
+                            </div>
                         </div>
-                        <div class="col-md-3 col-6 mb-2">
-                            <i class="fa fa-user text-primary mr-2"></i>
-                            <span><?php echo htmlspecialchars($vehicle['CapacidadAsientos']); ?> Pasajeros</span>
+
+                        <div class="col-md-4 col-6 mb-3">
+                            <div class="d-flex align-items-center">
+                                <i class="fa fa-user text-primary mr-2"></i>
+                                <span>
+                                    <strong>Capacidad:</strong>
+                                    <?php echo htmlspecialchars($vehicle['CapacidadAsientos']); ?> Pasajeros
+                                </span>
+                            </div>
                         </div>
-                        <div class="col-md-3 col-6 mb-2">
-                            <i class="fa fa-eye text-primary mr-2"></i>
-                            <span>GPS: <?php echo $vehicle['GPS'] ? 'Sí' : 'No'; ?></span>
+
+                        <div class="col-md-4 col-6 mb-3">
+                            <div class="d-flex align-items-center">
+                                <i class="fa fa-eye text-primary mr-2"></i>
+                                <span>
+                                    <strong>GPS:</strong>
+                                    <?php echo $vehicle['GPS'] ? 'Disponible' : 'No disponible'; ?>
+                                </span>
+                            </div>
                         </div>
-                        <div class="col-md-3 col-6 mb-2">
-                            <i class="fa fa-snowflake text-primary mr-2"></i>
-                            <span>A/C: <?php echo $vehicle['AireAcondicionado'] ? 'Sí' : 'No'; ?></span>
+
+                        <div class="col-md-4 col-6 mb-3">
+                            <div class="d-flex align-items-center">
+                                <i class="fa fa-snowflake text-primary mr-2"></i>
+                                <span>
+                                    <strong>Aire Acondicionado:</strong>
+                                    <?php echo $vehicle['AireAcondicionado'] ? 'Sí' : 'No'; ?>
+                                </span>
+                            </div>
                         </div>
                     </div>
                 </div>
 
-                <div class="col-lg-4 mb-5">
+                <div class="col-lg-4">
                     <div class="bg-secondary p-5">
                         <h3 class="text-primary text-center mb-4">Verificar Disponibilidad</h3>
                         <div class="form-group">
@@ -209,7 +268,6 @@ $relatedVehicles = $relatedStmt->fetchAll(PDO::FETCH_ASSOC);
             <h2 class="text-uppercase mb-4">Autos Relacionados</h2>
             <div class="row">
                 <?php
-                // Mostrar vehículos relacionados
                 if (!empty($relatedVehicles)) {
                     foreach ($relatedVehicles as $relatedVehicle) {
                         ?>
@@ -217,9 +275,9 @@ $relatedVehicles = $relatedStmt->fetchAll(PDO::FETCH_ASSOC);
                             <div class="rent-item mb-4">
                                 <img class="img-fluid mb-4"
                                     src="img/cars/<?php echo htmlspecialchars($relatedVehicle['Imagen1']); ?>"
-                                    alt="<?php echo htmlspecialchars($relatedVehicle['TituloVehiculo']); ?>">
+                                    alt="<?php echo htmlspecialchars($relatedVehicle['NombreMarca'] . ' ' . $relatedVehicle['NombreModelo']); ?>">
                                 <h4 class="text-uppercase mb-2">
-                                    <?php echo htmlspecialchars($relatedVehicle['TituloVehiculo']); ?>
+                                    <?php echo htmlspecialchars($relatedVehicle['NombreMarca'] . ' ' . $relatedVehicle['NombreModelo']); ?>
                                 </h4>
                                 <div class="px-2 mb-2">
                                     <span>$<?php echo htmlspecialchars($relatedVehicle['PrecioPorDia']); ?>/Día</span>

@@ -5,7 +5,7 @@
     </div>
 
     <div class="admin-info">
-        Panel Administrativo
+        Panel del Empleado
     </div>
 
     <div class="sidebar-sticky">
@@ -19,30 +19,30 @@
             </li>
             <li class="nav-item">
                 <a class="nav-link <?php echo basename($_SERVER['PHP_SELF']) == 'users.php' ? 'active' : ''; ?>"
-                    href="users.php">
-                    <i class="fas fa-users"></i>
-                    Gestión de Usuarios
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link <?php echo basename($_SERVER['PHP_SELF']) == 'employees.php' ? 'active' : ''; ?>"
-                    href="employees.php">
-                    <i class="fas fa-address-book"></i>
-                    Gestión de Empleados
+                    href="alquileres.php">
+                    <i class="fas fa-car-side"></i>
+                    Gestión de Alquileres
                 </a>
             </li>
             <li class="nav-item">
                 <a class="nav-link <?php echo basename($_SERVER['PHP_SELF']) == 'vehicles.php' ? 'active' : ''; ?>"
-                    href="vehicles.php">
-                    <i class="fas fa-car"></i>
-                    Gestión de Vehículos
+                    href="devoluciones.php">
+                    <i class="fas fa-undo-alt"></i>
+                    Gestión de Devoluciones
                 </a>
             </li>
             <li class="nav-item">
                 <a class="nav-link <?php echo basename($_SERVER['PHP_SELF']) == 'reservas.php' ? 'active' : ''; ?>"
-                    href="reservas.php">
-                    <i class="fas fa-calendar-alt"></i>
-                    Gestión de Reservas
+                    href="disponibilidad.php">
+                    <i class="fas fa-search"></i>
+                    Consulta de Disponibilidad
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link <?php echo basename($_SERVER['PHP_SELF']) == 'tarifas.php' ? 'active' : ''; ?>"
+                    href="facturacion.php">
+                    <i class="fas fa-dollar-sign"></i>
+                    Facturación y Pagos
                 </a>
             </li>
             <li class="nav-item">
@@ -50,13 +50,6 @@
                     href="reports.php">
                     <i class="fas fa-chart-bar"></i>
                     Informes
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link <?php echo basename($_SERVER['PHP_SELF']) == 'tarifas.php' ? 'active' : ''; ?>"
-                    href="tarifas.php">
-                    <i class="fas fa-dollar-sign"></i>
-                    Tarifas
                 </a>
             </li>
             <li class="nav-item">

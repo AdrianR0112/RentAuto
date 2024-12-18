@@ -4,8 +4,21 @@ require_once 'includes/config.php';
 if (isset($_GET['id'])) {
     $vehicle_id = $_GET['id'];
 
-    // Realizar la consulta para obtener los detalles del vehículo
-    $sql = "SELECT * FROM tblvehicles WHERE id = :id";
+    // Updated query to join with brands and models tables
+    $sql = "SELECT 
+                v.*, 
+                b.NombreMarca AS MarcaVehiculo, 
+                m.NombreModelo AS ModeloVehiculo,
+                m.AnoModelo
+            FROM 
+                tblvehicles v
+            LEFT JOIN 
+                tblbrands b ON v.MarcaVehiculo = b.id
+            LEFT JOIN 
+                tblmodels m ON v.IdModelo = m.id
+            WHERE 
+                v.id = :id";
+
     $stmt = $dbh->prepare($sql);
     $stmt->bindParam(':id', $vehicle_id, PDO::PARAM_INT);
     $stmt->execute();
