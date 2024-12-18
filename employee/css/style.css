@@ -1,55 +1,318 @@
-.brand_logo_cont {
+/**********  Estilos CSS **********/
+
+:root {
+    --primary: #F77D0A;
+    --secondary: #2B2E4A;
+    --light: #F4F5F8;
+    --dark: #1C1E32;
+}
+
+body,
+html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    background: var(--light) !important; 
+}
+
+.user_card {
+    height: 400px;
+    width: 350px;
+    margin-top: auto;
+    margin-bottom: auto;
+    background: var(--secondary);
+    position: relative;
     display: flex;
     justify-content: center;
-    align-items: center;
-    padding: 15px 0;
-}
-.brand_l {
-    max-width: 150px;
-    max-height: 100px;
-    object-fit: contain;
-}
-.admin-info {
-    color: white;
-    text-align: center;
+    flex-direction: column;
     padding: 10px;
-    background-color: rgba(0, 0, 0, 0.2);
-} 
-
-body {
-    overflow-x: hidden;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    border-radius: 5px;
 }
 
-.sidebar {
-    position: fixed;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    z-index: 100;
-    padding: 48px 0 0;
-    box-shadow: inset -1px 0 0 rgba(0, 0, 0, .1);
+.brand_logo_container {
+    position: absolute;
+    height: 170px;
+    width: 170px;
+    top: -75px;
+    border-radius: 50%;
+    background: var(--secondary);
+    padding: 10px;
+    text-align: center;
 }
 
-.sidebar .nav-link {
+.brand_logo {
+    height: 150px;
+    width: 150px;
+    border-radius: 50%;
+    border: 2px solid var(--light); 
+}
+
+.form_container {
+    margin-top: 10px; 
+}
+
+.login_btn {
+    width: 100%;
+    background: var(--primary) !important; 
+    color: var(--dark) !important; 
+}
+
+.login_btn:focus {
+    box-shadow: none !important;
+    outline: 0px !important;
+}
+
+.login_container {
+    padding: 0 2rem;
+}
+
+.input-group-text {
+    background: var(--primary) !important; 
+    color: var(--secondary) !important; 
+    border: 0 !important;
+    border-radius: 0.25rem 0 0 0.25rem !important;
+}
+
+.input_user,
+.input_pass:focus {
+    box-shadow: none !important;
+    outline: 0px !important;
+}
+
+.text-secondary-link {
+    color: var(--primary) !important;
+}
+
+.text-admin-login {
+    color: var(--primary) !important;
+    margin-top: 50px;
+}
+
+/* Checkbox */
+.custom-checkbox .custom-control-input:checked~.custom-control-label::before {
+    background-color: var(--primary) !important; 
+}
+
+/* Media Queries para Responsividad */
+@media (max-width: 576px) {
+    /* En pantallas pequeñas, asegúrate de que ocupa el 100% del alto y ancho */
+    .user_card {
+        height: 100vh;
+        padding: 15px;
+        border-radius: 0; /* Sin bordes redondeados para pantalla completa */
+    }
+    .brand_logo_container {
+        height: 120px;
+        width: 120px;
+        top: -50px;
+    }
+    .brand_logo {
+        height: 100px;
+        width: 100px;
+    }
+    .form_container {
+        margin-top: 20px;
+    }
+    .login_container {
+        padding: 0 1rem;
+    }
+}
+
+@media (max-width: 768px) {
+    /* Redimensiona los elementos para tablets */
+    .user_card {
+        width: 100%;
+        height: 100vh; /* Ocupar toda la altura */
+    }
+}
+
+
+/* Header y Navegación */
+.navbar-brand {
+    font-family: 'Oswald', sans-serif;
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--primary) !important;
+}
+
+.admin-sidebar {
+    background: var(--secondary);
+    min-height: 100vh;
+    padding: 20px 0;
+    box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+}
+
+.admin-sidebar .nav-link {
+    font-family: 'Rubik', sans-serif;
+    color: var(--light);
+    padding: 15px 25px;
+    border-left: 4px solid transparent;
+    transition: 0.3s;
+}
+
+.admin-sidebar .nav-link:hover,
+.admin-sidebar .nav-link.active {
+    background: rgba(247, 125, 10, 0.1);
+    color: var(--primary);
+    border-left-color: var(--primary);
+}
+
+/* Contenido Principal */
+.admin-content {
+    padding: 30px;
+    background: #f8f9fa;
+}
+
+.admin-content h2 {
+    font-family: 'Oswald', sans-serif;
+    color: var(--secondary);
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+}
+
+/* Tarjetas de Estadísticas */
+.stats-card {
+    background: white;
+    border-radius: 10px;
+    padding: 25px;
+    margin-bottom: 25px;
+    transition: 0.3s;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.stats-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.15);
+}
+
+.stats-card h4 {
+    font-family: 'Rubik', sans-serif;
+    color: #666;
+    font-size: 1rem;
+    margin-bottom: 1rem;
+}
+
+.stats-card h2 {
+    color: var(--primary);
+    font-family: 'Oswald', sans-serif;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+}
+
+/* Tablas */
+.admin-table {
+    background: white;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.admin-table th {
+    background: var(--secondary);
+    color: var(--light);
+    font-family: 'Rubik', sans-serif;
     font-weight: 500;
-    color: #fff;
+    padding: 15px;
 }
 
-.sidebar .nav-link.active {
-    color: #fff;
-    background-color: rgba(255, 255, 255, 0.2);
+.admin-table td {
+    padding: 15px;
+    vertical-align: middle;
 }
 
-.sidebar-sticky {
-    position: relative;
-    top: 0;
-    height: calc(100vh - 48px);
-    padding-top: .5rem;
-    overflow-x: hidden;
-    overflow-y: auto;
+/* Botones */
+.btn-primary {
+    background-color: var(--primary);
+    border-color: var(--primary);
+    font-family: 'Rubik', sans-serif;
+    padding: 8px 20px;
+    border-radius: 5px;
 }
 
-.content-wrapper {
-    margin-left: 200px;
-    /* Ancho del sidebar */
+.btn-primary:hover {
+    background-color: #e67208;
+    border-color: #e67208;
+}
+
+.action-buttons .btn {
+    padding: 5px 10px;
+    margin: 0 3px;
+    border-radius: 4px;
+}
+
+/* Gráficos y Contenedores */
+.chart-container {
+    background: white;
+    padding: 25px;
+    border-radius: 10px;
+    margin-bottom: 25px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.chart-container h4 {
+    font-family: 'Rubik', sans-serif;
+    color: var(--secondary);
+    margin-bottom: 1.5rem;
+}
+
+/* Modales */
+.modal-content {
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.modal-header {
+    background: var(--secondary);
+    color: white;
+    padding: 15px 25px;
+}
+
+.modal-header .modal-title {
+    font-family: 'Oswald', sans-serif;
+    font-weight: 600;
+}
+
+.modal-body {
+    padding: 25px;
+}
+
+.form-group label {
+    font-family: 'Rubik', sans-serif;
+    color: #666;
+    margin-bottom: 0.5rem;
+}
+
+/* .form-control {
+    border-radius: 5px;
+    padding: 10px 15px;
+    border: 1px solid #ddd;
+} */
+
+/* Badges */
+.badge {
+    padding: 8px 12px;
+    border-radius: 20px;
+    font-family: 'Rubik', sans-serif;
+    font-weight: 500;
+}
+
+.badge-success {
+    background-color: #28a745;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .admin-sidebar {
+        min-height: auto;
+        padding: 15px;
+    }
+    
+    .admin-content {
+        padding: 15px;
+    }
+    
+    .stats-card {
+        margin-bottom: 15px;
+    }
 }
